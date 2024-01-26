@@ -1,9 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
-import vista_admin
-import vista_usuario
+import vista_admin, vista_usuario
 from base_de_datos.cleinte_db import validar_usuario, ingresar_dato
-
 
 class Ventana_login:
     #constructor
@@ -17,15 +15,14 @@ class Ventana_login:
         self.limpiar_pantalla()
 
         tk.Label(self.ventana, text="Usuario:").pack()
-        self.entry_usuario = tk.Entry(self.ventana)
-        self.entry_usuario.pack()
+        self.entry_correo = tk.Entry(self.ventana)
+        self.entry_correo.pack()
 
         tk.Label(self.ventana, text="Contraseña:").pack()
         self.entry_contraseña = tk.Entry(self.ventana, show="*")
         self.entry_contraseña.pack()
 
-        boton_login = tk.Button(self.ventana, text="Iniciar Sesión", command= lambda: validar_usuario(self.entry_usuario,
-                                                                                                         self.entry_contraseña))
+        boton_login = tk.Button(self.ventana, text="Iniciar Sesión", command= self.validar_login)
         boton_login.pack()
         
         boton_crear_usuario = tk.Button(self.ventana, text="Crear usuario", command=self.crear_registro)
@@ -63,16 +60,17 @@ class Ventana_login:
                                                                                                   self.contraseña.get()))
          self.guardar.pack()
 
-    '''def validar_login(self):
-        usuario = self.entry_usuario.get()
+    def validar_login(self):
+        correo = self.entry_correo.get()
         contraseña = self.entry_contraseña.get()
 
-        if usuario == "admin" and contraseña == "admin123":
+        if validar_usuario(correo, contraseña) == True:
             vista_admin.mostrar_vista_admin(self.ventana)
-        elif usuario == "user" and contraseña == "user123":
-            vista_usuario.mostrar_vista_usuario(self.ventana)
+        elif validar_usuario(correo, contraseña) == False:
+            #vista_usuario.mostrar_vista_usuario(self.ventana)
+            print("pos no")
         else:
-            messagebox.showerror("Error", "Credenciales incorrectas")'''
+            messagebox.showerror("Error", "Credenciales incorrectas")
 
     def limpiar_pantalla(self):
         for widget in self.ventana.winfo_children():
